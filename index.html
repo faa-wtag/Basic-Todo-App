@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 
-<html>  
+<html>
+  <head>
+    <title>Simple_To_Do_App</title>
+  </head>
 
-<head>  
+  <body>
+    <div class="Container">
+      <h1>My To Do App</h1>
+      <div class="inputs">
+        <input type="text" placeholder="Enter Your Task Here" id="inp" />
+        <button onclick="Add()">Add</button>
+      </div>
 
-    <title> Simple_To_Do_App </title>
-
-</head>
-
-
-<body>
-    <div class = "Container">  
-        <h1>My To Do App</h1>
-        <div class = "inputs"> 
-            <input type = "text" placeholder="Enter Your Task Here" id = "inp">
-            <button onclick = "Add()"> Add </button>
-
-        </div>
-
-        <div class = "text"> 
-
-        </div>    
-
+      <div class="text"></div>
     </div>
-</body>
+  </body>
 
-<script src="todo.js"> </script>
+  <script src="todo.js"></script>
 </html>
