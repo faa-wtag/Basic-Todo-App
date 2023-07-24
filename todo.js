@@ -7,11 +7,24 @@ function handleTodo() {
   const newTodo = document.createElement("li");
   newTodo.innerHTML = taskText;
   tasksList.appendChild(newTodo);
+
+  const deleteButton = createDeleteButton();
+  newTodo.appendChild(deleteButton);
+
   resetInputField();
 }
 
 function resetInputField() {
   inputElement.value = "";
+}
+
+function createDeleteButton() {
+  const deleteButton = document.createElement("button");
+  deleteButton.innerHTML = "Delete";
+  deleteButton.addEventListener("click", function () {
+    deleteButton.parentElement.remove();
+  });
+  return deleteButton;
 }
 
 addBtn.addEventListener("click", handleTodo);
