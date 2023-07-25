@@ -2,15 +2,19 @@ const inputElement = document.getElementById("todoInput");
 const tasksList = document.getElementById("tasksList"); //ul
 const addBtn = document.getElementById("add-btn");
 
+let todoItems = [];
+
 function handleTodo() {
   const taskText = inputElement.value;
-  const newTodo = document.createElement("li");
-  newTodo.innerHTML = taskText;
-  tasksList.appendChild(newTodo);
 
-  const deleteButton = createDeleteButton();
-  newTodo.appendChild(deleteButton);
+  const newTodo = {
+    id: Date.now(),
+    value: taskText,
+    doneState: false,
+  };
 
+  todoItems.push(newTodo);
+  renderTodoList();
   resetInputField();
 }
 
@@ -18,13 +22,33 @@ function resetInputField() {
   inputElement.value = "";
 }
 
-function createDeleteButton() {
-  const deleteButton = document.createElement("button");
-  deleteButton.innerHTML = "Delete";
-  deleteButton.addEventListener("click", function () {
-    deleteButton.parentElement.remove();
+function renderTodoList() {
+  tasksList.innerHTML = "";
+
+  todoItems.forEach((todo) => {
+    const newTodoItem = document.createElement("li");
+    newTodoItem.innerHTML = todo.value;
+
+    const deleteButtonElement = createDeleteButton(todo.id);
+    newTodoItem.appendChild(deleteButtonElement);
+    tasksList.appendChild(newTodoItem);
   });
-  return deleteButton;
+}
+
+function createDeleteButton(todoId) {
+  const deleteButtonElement = document.createElement("button");
+  deleteButtonElement.innerHTML = "Delete";
+  deleteButtonElement.addEventListener("click", function () {
+    deleteTodoItem(todoId);
+  });
+  return deleteButtonElement;
+}
+
+function deleteTodoItem(todoId) {
+  todoItems = todoItems.filter((todo) => todo.id !== todoId);
+  renderTodoList();
 }
 
 addBtn.addEventListener("click", handleTodo);
+
+renderTodoList(); // Initial Rendering of TodoList
