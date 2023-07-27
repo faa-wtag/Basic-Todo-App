@@ -1,8 +1,8 @@
 const inputElement = document.getElementById("todoInput");
-const tasksList = document.getElementById("tasksList");
+const tasks = document.getElementById("tasksList");
 const addBtn = document.getElementById("add-btn");
 
-let todoItems = [];
+let todos = [];
 
 function handleTodo() {
   const taskText = inputElement.value;
@@ -13,7 +13,7 @@ function handleTodo() {
     doneState: false,
   };
 
-  todoItems.push(newTodo);
+  todos.push(newTodo);
   renderTodoList();
   resetInputField();
 }
@@ -23,30 +23,32 @@ function resetInputField() {
 }
 
 function renderTodoList() {
-  tasksList.innerHTML = "";
+  tasks.innerHTML = "";
 
-  todoItems.forEach((todo) => {
+  todos.forEach((todo) => {
     const newTodoItem = document.createElement("li");
     newTodoItem.innerHTML = todo.value;
 
     const deleteButtonElement = createDeleteButton(todo.id);
     newTodoItem.appendChild(deleteButtonElement);
-    tasksList.appendChild(newTodoItem);
+    tasks.appendChild(newTodoItem);
   });
 }
 
 function createDeleteButton(todoId) {
   const deleteButtonElement = document.createElement("button");
   deleteButtonElement.innerHTML = "Delete";
-  deleteButtonElement.addEventListener("click", function () {
-    deleteTodoItem(todoId);
-  });
+  deleteButtonElement.addEventListener("click", () => handleTodoDelete(todoId));
   return deleteButtonElement;
 }
 
-function deleteTodoItem(todoId) {
-  todoItems = todoItems.filter((todo) => todo.id !== todoId);
+function handleTodoDelete(todoId) {
+  deleteTodoItem(todoId);
   renderTodoList();
+}
+
+function deleteTodoItem(todoId) {
+  todos = todos.filter((todo) => todo.id !== todoId);
 }
 
 addBtn.addEventListener("click", handleTodo);
