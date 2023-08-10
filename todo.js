@@ -3,23 +3,18 @@ const tasks = document.getElementById("tasksList");
 const addBtn = document.getElementById("add-btn");
 
 let todos = [];
-let editTodoId = null;
 
 function handleTodo() {
   const taskText = inputElement.value;
 
-  if (editTodoId) {
-    handleTodoUpdate(editTodoId);
-  } else {
-    const newTodo = {
-      id: Date.now(),
-      value: taskText,
-      doneState: false,
-    };
-    todos.push(newTodo);
-    renderTodoList();
-  }
-
+  const newTodo = {
+    id: Date.now(),
+    value: taskText,
+    doneState: false,
+    editState: false,
+  };
+  todos.push(newTodo);
+  renderTodoList();
   resetInputField();
 }
 
@@ -33,21 +28,23 @@ function renderTodoList() {
   todos.forEach((todo) => {
     const newTodoItem = document.createElement("li");
 
-    if (editTodoId === todo.id) {
-      const inputBox = document.createElement("input");
-      inputBox.value = todo.value;
-      const updateButtonElement = createUpdateButton();
-      const cancelButtonElement = createCancelButton();
+    if (todo.editState) {
+      const editInput = document.createElement("input");
+      editInput.value = todo.value;
+      newTodoItem.appendChild(editInput);
 
-      newTodoItem.appendChild(inputBox);
+      const updateButtonElement = createUpdateButton(todo.id);
       newTodoItem.appendChild(updateButtonElement);
+
+      const cancelButtonElement = createCancelButton(todo.id);
       newTodoItem.appendChild(cancelButtonElement);
     } else {
       newTodoItem.innerHTML = todo.value;
 
       const deleteButtonElement = createDeleteButton(todo.id);
-      const editButtonElement = createEditButton(todo.id);
       newTodoItem.appendChild(deleteButtonElement);
+
+      const editButtonElement = createEditButton(todo.id);
       newTodoItem.appendChild(editButtonElement);
     }
     tasks.appendChild(newTodoItem);
@@ -70,20 +67,49 @@ function createEditButton(todoId) {
   return editButtonElement;
 }
 
-function createUpdateButton() {
+function createUpdateButton(todoId) {
   const updateButtonElement = document.createElement("button");
   updateButtonElement.innerHTML = "Update";
-  updateButtonElement.addEventListener("click", () =>
-    handleTodoUpdate(editTodoId)
-  );
+  updateButtonElement.addEventListener("click", () => handleTodoUpdate(todoId));
   return updateButtonElement;
 }
 
-function createCancelButton() {
+function createCancelButton(todoId) {
   const cancelButtonElement = document.createElement("button");
   cancelButtonElement.innerHTML = "Cancel";
-  cancelButtonElement.addEventListener("click", () => cancelEdit());
+  cancelButtonElement.addEventListener("click", () => cancelEdit(todoId));
   return cancelButtonElement;
+}
+
+function handleTodoEdit(todoId) {
+  todos.forEach((todo) => {
+    if (todo.id === todoId) {
+      todo.editState = true;
+    } else {
+      todo.editState = false;
+    }
+  });
+  renderTodoList();
+}
+
+function handleTodoUpdate(todoId) {
+  todos.forEach((todo) => {
+    if (todo.id === todoId) {
+      const editedText = tasks.querySelector("li input");
+      todo.value = editedText.value;
+      todo.editState = false;
+    }
+  });
+  renderTodoList();
+}
+
+function cancelEdit(todoId) {
+  todos.forEach((todo) => {
+    if (todo.id === todoId) {
+      todo.editState = false;
+    }
+  });
+  renderTodoList();
 }
 
 function handleTodoDelete(todoId) {
@@ -93,36 +119,6 @@ function handleTodoDelete(todoId) {
 
 function deleteTodoItem(todoId) {
   todos = todos.filter((todo) => todo.id !== todoId);
-}
-
-function editTodoItem(todoId) {
-  editTodoId = todoId;
-  renderTodoList();
-}
-
-function updateTodoItem(todoId, editedText) {
-  todos = todos.map((todo) => {
-    if (todo.id === todoId) {
-      return { ...todo, value: editedText };
-    }
-    return todo;
-  });
-  editTodoId = null;
-  renderTodoList();
-}
-
-function cancelEdit() {
-  editTodoId = null;
-  renderTodoList();
-}
-
-function handleTodoEdit(todoId) {
-  editTodoItem(todoId);
-}
-
-function handleTodoUpdate(todoId) {
-  const editedText = document.querySelector("li input").value;
-  updateTodoItem(todoId, editedText);
 }
 
 addBtn.addEventListener("click", handleTodo);
