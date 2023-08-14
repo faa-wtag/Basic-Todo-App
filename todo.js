@@ -31,6 +31,7 @@ function renderTodoList() {
     if (todo.editState) {
       const editInput = document.createElement("input");
       editInput.value = todo.value;
+      editInput.classList.add("edited-input"); //edited
       newTodoItem.appendChild(editInput);
 
       const updateButtonElement = createUpdateButton(todo.id);
@@ -85,9 +86,9 @@ function handleTodoEdit(todoId) {
   todos.forEach((todo) => {
     if (todo.id === todoId) {
       todo.editState = true;
-    } else {
-      todo.editState = false;
+      return;
     }
+    todo.editState = false;
   });
   renderTodoList();
 }
@@ -95,7 +96,7 @@ function handleTodoEdit(todoId) {
 function handleTodoUpdate(todoId) {
   todos.forEach((todo) => {
     if (todo.id === todoId) {
-      const editedText = tasks.querySelector("li input");
+      const editedText = tasks.querySelector("li input.edited-input");
       todo.value = editedText.value;
       todo.editState = false;
     }
