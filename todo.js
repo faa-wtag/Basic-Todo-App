@@ -28,18 +28,14 @@ function renderTodoList() {
   todos.forEach((todo) => {
     const newTodoItem = document.createElement("li");
 
-    ///Updating the render function
-
     if (todo.doneState) {
       const doneText = document.createElement("s");
       doneText.textContent = todo.value;
       newTodoItem.append(doneText);
-      //adding only delete button if todo is marked done
+
       const deleteButtonElement = createDeleteButton(todo.id);
       newTodoItem.appendChild(deleteButtonElement);
-    }
-    ///Updating the render function
-    else if (todo.editState) {
+    } else if (todo.editState) {
       const editInput = document.createElement("input");
       editInput.value = todo.value;
       newTodoItem.appendChild(editInput);
@@ -49,10 +45,7 @@ function renderTodoList() {
 
       const cancelButtonElement = createCancelButton(todo.id);
       newTodoItem.appendChild(cancelButtonElement);
-    }
-
-    ///Updating the render function
-    else {
+    } else {
       newTodoItem.innerHTML = todo.value;
 
       const doneButtonElement = createDoneButton(todo.id);
@@ -64,11 +57,6 @@ function renderTodoList() {
       const deleteButtonElement = createDeleteButton(todo.id);
       newTodoItem.appendChild(deleteButtonElement);
     }
-
-    // if (!todo.doneState) {
-    //   const deleteButtonElement = createDeleteButton(todo.id);
-    //   newTodoItem.appendChild(deleteButtonElement);
-    // }
 
     tasks.appendChild(newTodoItem);
   });
@@ -103,7 +91,7 @@ function createCancelButton(todoId) {
   cancelButtonElement.addEventListener("click", () => cancelEdit(todoId));
   return cancelButtonElement;
 }
-////Addeed Done button here
+
 function createDoneButton(todoId) {
   const doneButtonElement = document.createElement("button");
   doneButtonElement.innerHTML = "Done";
