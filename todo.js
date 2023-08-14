@@ -31,7 +31,7 @@ function renderTodoList() {
     if (todo.editState) {
       const editInput = document.createElement("input");
       editInput.value = todo.value;
-      editInput.classList.add("edited-input"); //edited
+      editInput.classList.add("edited-input");
       newTodoItem.appendChild(editInput);
 
       const updateButtonElement = createUpdateButton(todo.id);
