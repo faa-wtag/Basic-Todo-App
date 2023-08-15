@@ -11,8 +11,8 @@ function handleTodo() {
     id: Date.now(),
     value: taskText,
     doneState: false,
+    editState: false,
   };
-
   todos.push(newTodo);
   renderTodoList();
   resetInputField();
@@ -27,10 +27,27 @@ function renderTodoList() {
 
   todos.forEach((todo) => {
     const newTodoItem = document.createElement("li");
-    newTodoItem.innerHTML = todo.value;
 
-    const deleteButtonElement = createDeleteButton(todo.id);
-    newTodoItem.appendChild(deleteButtonElement);
+    if (todo.editState) {
+      const editInput = document.createElement("input");
+      editInput.value = todo.value;
+      editInput.classList.add("edited-input");
+      newTodoItem.appendChild(editInput);
+
+      const updateButtonElement = createUpdateButton(todo.id);
+      newTodoItem.appendChild(updateButtonElement);
+
+      const cancelButtonElement = createCancelButton(todo.id);
+      newTodoItem.appendChild(cancelButtonElement);
+    } else {
+      newTodoItem.innerHTML = todo.value;
+
+      const deleteButtonElement = createDeleteButton(todo.id);
+      newTodoItem.appendChild(deleteButtonElement);
+
+      const editButtonElement = createEditButton(todo.id);
+      newTodoItem.appendChild(editButtonElement);
+    }
     tasks.appendChild(newTodoItem);
   });
 }
@@ -40,6 +57,59 @@ function createDeleteButton(todoId) {
   deleteButtonElement.innerHTML = "Delete";
   deleteButtonElement.addEventListener("click", () => handleTodoDelete(todoId));
   return deleteButtonElement;
+}
+
+function createEditButton(todoId) {
+  const editButtonElement = document.createElement("button");
+  editButtonElement.innerHTML = "Edit";
+  editButtonElement.addEventListener("click", function () {
+    handleTodoEdit(todoId);
+  });
+  return editButtonElement;
+}
+
+function createUpdateButton(todoId) {
+  const updateButtonElement = document.createElement("button");
+  updateButtonElement.innerHTML = "Update";
+  updateButtonElement.addEventListener("click", () => handleTodoUpdate(todoId));
+  return updateButtonElement;
+}
+
+function createCancelButton(todoId) {
+  const cancelButtonElement = document.createElement("button");
+  cancelButtonElement.innerHTML = "Cancel";
+  cancelButtonElement.addEventListener("click", () => cancelEdit(todoId));
+  return cancelButtonElement;
+}
+
+function handleTodoEdit(todoId) {
+  const todo = todos.find(({ id }) => id === todoId);
+  if (todo === undefined) {
+    return;
+  }
+  todo.editState = true;
+  renderTodoList();
+}
+
+function handleTodoUpdate(todoId) {
+  const todo = todos.find(({ id }) => id === todoId);
+
+  if (todo === undefined) {
+    return;
+  }
+  const editedText = tasks.querySelector("li input.edited-input");
+  todo.value = editedText.value;
+  todo.editState = false;
+  renderTodoList();
+}
+
+function cancelEdit(todoId) {
+  const todo = todos.find(({ id }) => id === todoId);
+  if (todo === undefined) {
+    return;
+  }
+  todo.editState = false;
+  renderTodoList();
 }
 
 function handleTodoDelete(todoId) {
@@ -52,5 +122,4 @@ function deleteTodoItem(todoId) {
 }
 
 addBtn.addEventListener("click", handleTodo);
-
 renderTodoList(); // Initial Rendering of TodoList
