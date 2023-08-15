@@ -101,12 +101,12 @@ function createDoneButton(todoId) {
 }
 
 function handleTodoDone(todoId) {
-  todos.forEach((todo) => {
-    if (todo.id === todoId) {
-      todo.doneState = true;
-      todo.editState = false;
-    }
-  });
+  const todo = todos.find(({ id }) => id === todoId);
+  if (todo === undefined) {
+    return;
+  }
+  todo.doneState = true;
+  todo.editState = false;
   renderTodoList();
 }
 
