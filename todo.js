@@ -83,33 +83,32 @@ function createCancelButton(todoId) {
 }
 
 function handleTodoEdit(todoId) {
-  todos.forEach((todo) => {
-    if (todo.id === todoId) {
-      todo.editState = true;
-      return;
-    }
-    todo.editState = false;
-  });
+  const todo = todos.find(({ id }) => id === todoId);
+  if (todo === undefined) {
+    return;
+  }
+  todo.editState = true;
   renderTodoList();
 }
 
 function handleTodoUpdate(todoId) {
-  todos.forEach((todo) => {
-    if (todo.id === todoId) {
-      const editedText = tasks.querySelector("li input.edited-input");
-      todo.value = editedText.value;
-      todo.editState = false;
-    }
-  });
+  const todo = todos.find(({ id }) => id === todoId);
+
+  if (todo === undefined) {
+    return;
+  }
+  const editedText = tasks.querySelector("li input.edited-input");
+  todo.value = editedText.value;
+  todo.editState = false;
   renderTodoList();
 }
 
 function cancelEdit(todoId) {
-  todos.forEach((todo) => {
-    if (todo.id === todoId) {
-      todo.editState = false;
-    }
-  });
+  const todo = todos.find(({ id }) => id === todoId);
+  if (todo === undefined) {
+    return;
+  }
+  todo.editState = false;
   renderTodoList();
 }
 
