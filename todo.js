@@ -27,11 +27,10 @@ function renderTodoList() {
 
   todos.forEach((todo) => {
     const newTodoItem = document.createElement("li");
+    newTodoItem.textContent = todo.value;
 
     if (todo.doneState) {
-      const doneText = document.createElement("s");
-      doneText.textContent = todo.value;
-      newTodoItem.append(doneText);
+      newTodoItem.classList.add("completed");
 
       const deleteButtonElement = createDeleteButton(todo.id);
       newTodoItem.appendChild(deleteButtonElement);
