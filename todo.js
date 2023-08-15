@@ -26,40 +26,57 @@ function renderTodoList() {
   tasks.innerHTML = "";
 
   todos.forEach((todo) => {
-    const newTodoItem = document.createElement("li");
-    newTodoItem.textContent = todo.value;
+    let newTodoItem = null;
 
     if (todo.doneState) {
-      newTodoItem.classList.add("completed");
-
-      const deleteButtonElement = createDeleteButton(todo.id);
-      newTodoItem.appendChild(deleteButtonElement);
+      newTodoItem = manageDoneState(todo);
     } else if (todo.editState) {
-      const editInput = document.createElement("input");
-      editInput.value = todo.value;
-      editInput.classList.add("edited-input");
-      newTodoItem.appendChild(editInput);
-
-      const updateButtonElement = createUpdateButton(todo.id);
-      newTodoItem.appendChild(updateButtonElement);
-
-      const cancelButtonElement = createCancelButton(todo.id);
-      newTodoItem.appendChild(cancelButtonElement);
+      newTodoItem = manageEditSatet(todo);
     } else {
-      newTodoItem.innerHTML = todo.value;
-
-      const doneButtonElement = createDoneButton(todo.id);
-      newTodoItem.appendChild(doneButtonElement);
-
-      const editButtonElement = createEditButton(todo.id);
-      newTodoItem.appendChild(editButtonElement);
-
-      const deleteButtonElement = createDeleteButton(todo.id);
-      newTodoItem.appendChild(deleteButtonElement);
+      newTodoItem = manageInitialState(todo);
     }
 
     tasks.appendChild(newTodoItem);
   });
+}
+
+function manageDoneState(todo) {
+  const newTodoItem = document.createElement("li");
+  newTodoItem.textContent = todo.value;
+  newTodoItem.classList.add("completed");
+  const deleteButtonElement = createDeleteButton(todo.id);
+  newTodoItem.appendChild(deleteButtonElement);
+  return newTodoItem;
+}
+
+function manageEditSatet(todo) {
+  const newTodoItem = document.createElement("li");
+  const editInput = document.createElement("input");
+  editInput.value = todo.value;
+  editInput.classList.add("edited-input");
+  newTodoItem.appendChild(editInput);
+
+  const updateButtonElement = createUpdateButton(todo.id);
+  newTodoItem.appendChild(updateButtonElement);
+
+  const cancelButtonElement = createCancelButton(todo.id);
+  newTodoItem.appendChild(cancelButtonElement);
+  return newTodoItem;
+}
+
+function manageInitialState(todo) {
+  const newTodoItem = document.createElement("li");
+  newTodoItem.innerHTML = todo.value;
+
+  const doneButtonElement = createDoneButton(todo.id);
+  newTodoItem.appendChild(doneButtonElement);
+
+  const editButtonElement = createEditButton(todo.id);
+  newTodoItem.appendChild(editButtonElement);
+
+  const deleteButtonElement = createDeleteButton(todo.id);
+  newTodoItem.appendChild(deleteButtonElement);
+  return newTodoItem;
 }
 
 function createDeleteButton(todoId) {
