@@ -31,7 +31,7 @@ function renderTodoList() {
     if (todo.doneState) {
       newTodoItem = manageDoneState(todo);
     } else if (todo.editState) {
-      newTodoItem = manageEditSatet(todo);
+      newTodoItem = manageEditState(todo);
     } else {
       newTodoItem = manageInitialState(todo);
     }
@@ -49,7 +49,7 @@ function manageDoneState(todo) {
   return newTodoItem;
 }
 
-function manageEditSatet(todo) {
+function manageEditState(todo) {
   const newTodoItem = document.createElement("li");
   const editInput = document.createElement("input");
   editInput.value = todo.value;
@@ -122,7 +122,7 @@ function handleTodoDone(todoId) {
     return;
   }
   todo.doneState = true;
-  todo.editState = false;
+  //todo.editState = false;
   renderTodoList();
 }
 
